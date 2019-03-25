@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
 
-from .views import index, blog
+from posts.views import index, blog
 
 urlpatterns = [
     path('admin/', admin.site.urls),
