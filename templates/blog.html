@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block content %}
+
+  <!--/ Intro Skew Star /-->
+  <div class="intro intro-single route bg-image" style="background-image: url({% static 'img/overlay-bg.jpg' %})">
+    <div class="overlay-mf"></div>
+    <div class="intro-content display-table">
+      <div class="table-cell">
+        <div class="container">
+          <h2 class="intro-title mb-4">Blog Posts</h2>
+          <ol class="breadcrumb d-flex justify-content-center">
+            <li class="breadcrumb-item">
+              <a href="#">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="#">Blog</a>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--/ Intro Skew End /-->
+
+  <!--/ Section Blog-Single Star /-->
+  <section class="blog-wrapper sect-pt4" id="blog">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="row">
+              {% for post in queryset %}
+              <div class="col-md-6">
+                <div class="card card-blog">
+                    <div class="card-img">
+                        <a href="blog-single.html">
+                        <img src="{{ post.thumbnail.url }}" alt="" class="img-fluid">
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-category-box">
+                        <div class="card-category">
+                            <h6 class="category">{{ post.categories }}</h6>
+                        </div>
+                        </div>
+                        <h3 class="card-title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+                        <p class="card-description">
+                        {{ post.overview }}
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="post-author">
+                        <a href="#">
+                            <img src="{{ post.author.profile_picture }}" alt="" class="avatar rounded-circle">
+                            <span class="author">{{ post.author.user }}</span>
+                        </a>
+                        </div>
+                        <div class="post-date">
+                        <span class="ion-ios-clock-outline"></span> {{ post.timestamp|date }}
+                        </div>
+                    </div>
+                </div>
+              </div>
+              {% endfor %}
+          </div>
+
+          <!-- Pagination -->
+          <nav aria-label="Page navigation example">
+            <ul class="pagination pagination-template d-flex justify-content-center">
+                {% if queryset.has_previous %}
+                <li class="page-item"><a href="?{{ page_request_var }}={{ queryset.previous_page_number }}" class="page-link"> <i class="fa fa-angle-left"></i></a></li>
+                {% endif %}
+                <li class="page-item"><a href="?{{ page_request_var }}={{ queryset.number }}" class="page-link active">{{ queryset.number }}</a></li>
+                {% if queryset.has_next %}
+                <li class="page-item"><a href="?{{ page_request_var }}={{ queryset.next_page_number }}" class="page-link"> <i class="fa fa-angle-right"></i></a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        </div>
+        <div class="col-md-4">
+          <div class="widget-sidebar sidebar-search">
+            <h5 class="sidebar-title">Search</h5>
+            <div class="sidebar-content">
+              <form action="{% url 'search' %}">
+                <div class="input-group">
+                  <input type="text" name="q" class="form-control" placeholder="Search for..." aria-label="Search for...">
+                  <span class="input-group-btn">
+                    <button class="btn btn-secondary btn-search" type="submit">
+                      <span class="ion-android-search"></span>
+                    </button>
+                  </span>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="widget-sidebar">
+            <h5 class="sidebar-title">Recent Post</h5>
+            <div class="sidebar-content">
+              <ul class="list-sidebar">
+                {% for post in most_recent %}
+                <li>
+                  <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+          <div class="widget-sidebar widget-tags">
+            <h5 class="sidebar-title">Tags</h5>
+            <div class="sidebar-content">
+              <ul>
+                {% for post in queryset %}
+                <li>
+                  <a href="">{{ post.categories }}</a>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--/ Section Blog-Single End /-->
+
+  <!--/ Section Contact-Footer Star /-->
+  <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url({% static 'img/overlay-bg.jpg' %})">
+    <div class="overlay-mf"></div>
+    {% include 'footer.html' %}    
+  </section>
+  <!--/ Section Contact-footer End /-->
+
+  
+
+  {% endblock content %}
