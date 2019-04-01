@@ -1,0 +1,41 @@
+<div class="col-md-4">
+    <div class="widget-sidebar sidebar-search">
+      <h5 class="sidebar-title">Search</h5>
+      <div class="sidebar-content">
+        <form action="{% url 'search' %}">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search for..." aria-label="Search for...">
+            <span class="input-group-btn">
+              <button class="btn btn-secondary btn-search" type="submit">
+                <span class="ion-android-search"></span>
+              </button>
+            </span>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="widget-sidebar">
+      <h5 class="sidebar-title">Recent Post</h5>
+      <div class="sidebar-content">
+        <ul class="list-sidebar">
+          {% for post in most_recent %}
+          <li>
+            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="widget-sidebar widget-tags">
+      <h5 class="sidebar-title">Tags</h5>
+      <div class="sidebar-content">
+        <ul>
+          {% for post in queryset %}
+          <li>
+            <a href="">{{ post.categories }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>

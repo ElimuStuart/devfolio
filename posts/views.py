@@ -1,8 +1,9 @@
 from django.db.models import Q
 from django.core.paginator import PageNotAnInteger, Paginator, EmptyPage
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect, reverse
 
-from .models import Post
+from .models import Post, Comment
+from .forms import CommentForm
 
 
 def search(request):
@@ -49,5 +50,36 @@ def blog(request):
     return render(request, 'blog.html', context)
 
 def post(request, id):
-    return render(request, 'blog-single.html')
+    post = get_object_or_404(Post, id=id)
+    comments = post.comments.filter(parent__isnull=True).order_by('-timestamp')
+    post_list = Post.objects.all().order_by('-timestamp')
+    most_recent = Post.objects.order_by('-timestamp')[:5]
+
+    form = CommentForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid:
+            form.instance.user = request.user
+            parent_obj = None
+            try:
+                parent_id = int(request.POST.get('parent_id'))
+            except:
+                parent_id = None
+            if parent_id:
+                parent_obj = Comment.objects.get(id=parent_id)
+                if parent_obj:
+                    comment_reply = form.save(commit=False)
+                    comment_reply.parent = parent_obj
+            form.instance.post = post
+            form.save()
+            return redirect(reverse('post_detail', kwargs={
+                'id': post.id,
+            }))
+    context = {
+        'form':form,
+        'post': post,
+        'most_recent': most_recent,
+        'queryset': post_list,
+        'comments': comments,
+    }
+    return render(request, 'blog-single.html', context)
 

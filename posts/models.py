@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from tinymce import HTMLField
 
 User = get_user_model()
 
@@ -22,6 +23,7 @@ class Category(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=100)
     overview = models.TextField()
+    content = HTMLField()
     timestamp = models.DateTimeField(auto_now_add=True)
     comment_count = models.IntegerField(default=0)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
@@ -35,3 +37,19 @@ class Post(models.Model):
         return reverse('post_detail', kwargs={
             'id': self.id
         })
+
+    @property
+    def get_comments(self):
+        return self.comments.all().order_by('-timestamp')
+
+class Comment(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    website = models.URLField()
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return self.name
