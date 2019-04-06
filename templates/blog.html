@@ -43,7 +43,10 @@
                     <div class="card-body">
                         <div class="card-category-box">
                         <div class="card-category">
-                            <h6 class="category">{{ post.categories }}</h6>
+                          {% for cat in post.categories.all %}
+                          <h6 class="category">{{ cat }}</h6>
+                          {% endfor %}
+                            
                         </div>
                         </div>
                         <h3 class="card-title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>

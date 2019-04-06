@@ -25,6 +25,11 @@
               <li class="nav-item">
                 <a class="nav-link js-scroll" href="#blog">Blog</a>
               </li>
+              {% if request.user.is_stuff %}
+              <li class="nav-item">
+                <a class="nav-link js-scroll" href="{% url 'post_create' %}">Create</a>
+              </li>
+              {% endif %}
               <li class="nav-item">
                 <a class="nav-link js-scroll" href="#contact">Contact</a>
               </li>

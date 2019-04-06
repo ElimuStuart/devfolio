@@ -38,16 +38,26 @@
                 </li>
                 <li>
                   <span class="ion-pricetag"></span>
-                  <a href="#">{{ post.categories }}</a>
+                  {% for cat in post.categories.all %}
+                  <a href="#">{{ cat }}</a>
+                  {% endfor %}
                 </li>
                 <li>
                   <span class="ion-chatbox"></span>
                   <a href="#">{{ post.comment_count }}</a>
                 </li>
+                <li>
+                  <span class="ion-chatbox"></span>
+                  <a href="{% url 'post_update' id=post.id %}">Update</a>
+                </li>
+                <li>
+                  <span class="ion-chatbox"></span>
+                  <a href="{% url 'post_delete' id=post.id %}">Delete</a>
+                </li>
               </ul>
             </div>
             <div class="article-content">
-              {{ post.content | safe }}
+              {{ post.content|safe }}
             </div>
           </div>
           <div class="box-comments">
@@ -71,7 +81,7 @@
                     {{ comment.content }}
                   </p>
                   <a href="">Reply</a>
-                  <!-- <div class="form-comments rf">
+                  {% comment %}<div class="form-comments rf">
                     <div class="title-box-2">
                       <h3 class="title-left">
                         Leave a Reply
@@ -107,7 +117,7 @@
                         </div>
                       </div>
                     </form>
-                  </div> -->
+                  </div>{% endcomment %}
                 </div>
               </li>
               {% for reply in comment.replies.all %}
@@ -140,7 +150,7 @@
                 Leave a Reply
               </h3>
             </div>
-            <form action="." method="POST" class="form-mf">
+            <form action="." method="POST" class="form-mf" novalidate>
               <div class="row">
                 {% csrf_token %}
                 

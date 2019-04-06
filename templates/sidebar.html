@@ -32,7 +32,9 @@
         <ul>
           {% for post in queryset %}
           <li>
-            <a href="">{{ post.categories }}</a>
+            {% for cat in post.categories.all %}
+              <a href="#">{{ cat }}</a>
+            {% endfor %}
           </li>
           {% endfor %}
         </ul>
