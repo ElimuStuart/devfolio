@@ -47,11 +47,11 @@
                   <a href="#">{{ post.comments.count }}</a>
                 </li>
                 <li>
-                  <span class="ion-chatbox"></span>
+                  <span class="ion-edit"></span>
                   <a href="{% url 'post_update' id=post.id %}">Update</a>
                 </li>
                 <li>
-                  <span class="ion-chatbox"></span>
+                  <span class="ion-trash-b"></span>
                   <a href="{% url 'post_delete' id=post.id %}">Delete</a>
                 </li>
               </ul>

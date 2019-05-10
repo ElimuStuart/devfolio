@@ -103,7 +103,7 @@ def post(request, id):
     most_recent = Post.objects.order_by('-timestamp')[:5]
 
     # TODO: get article reading time
-    read_time = estimate_reading_time(url)
+    # read_time = estimate_reading_time(url)
 
     form = CommentForm(request.POST or None)
     if request.method == 'POST':

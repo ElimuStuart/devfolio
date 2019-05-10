@@ -29,7 +29,7 @@ urlpatterns = [
     path('blog/', blog, name='post_list'),
     path('create/', post_create, name='post_create'),
     path('post/<id>/', post, name='post_detail'),
-    path('post/<id>/update', post_update, name='post_update'),
+    path('post/<id>/update/', post_update, name='post_update'),
     path('post/<id>/delete', post_delete, name='post_delete'),
     path('tinymce/', include('tinymce.urls')),
 ]
