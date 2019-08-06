@@ -1,5 +1,5 @@
 beautifulsoup4==4.7.1
-Django==2.1.7
+Django==2.1.11
 django-crispy-forms==1.7.2
 django-filebrowser-no-grappelli==3.7.8
 django-tinymce4-lite==1.7.4
