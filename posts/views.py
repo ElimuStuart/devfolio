@@ -70,7 +70,7 @@ def estimate_reading_time(url):
     return round(total_words/WPM)
 
 def index(request):
-    recent_queryset = Post.objects.all().order_by('-timestamp')[:3]
+    recent_queryset = Post.published.order_by('-publish')[:5]
     context = {
         'recent_queryset': recent_queryset,
     }
