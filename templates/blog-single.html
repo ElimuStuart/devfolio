@@ -200,7 +200,7 @@
             {% endif %}
           </div>
         </div>
-        {% comment %} {% include 'sidebar.html' with most_recent=most_recent queryset=queryset %} {% endcomment %}
+        {% include 'sidebar.html' with similar_posts=similar_posts post=post %}
       </div>
     </div>
   </section>
