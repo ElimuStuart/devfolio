@@ -1,3 +1,5 @@
+{% load posts_tags %}
+
 <div class="col-md-4">
     <div class="widget-sidebar sidebar-search">
       <h5 class="sidebar-title">Search</h5>
@@ -15,7 +17,7 @@
       </div>
     </div>
     <div class="widget-sidebar">
-      <h5 class="sidebar-title">Similar Posts</h5>
+      <h5 class="sidebar-title">{{display_title}} Posts</h5>
       <div class="sidebar-content">
         <ul class="list-sidebar">
           {% for post in similar_posts %}
@@ -30,6 +32,20 @@
         </ul>
       </div>
     </div>
+    <div class="widget-sidebar">
+      <h5 class="sidebar-title">Popular Posts</h5>
+      {% get_most_commented_posts as popular_posts %}
+      <div class="sidebar-content">
+        <ul class="list-sidebar">
+          {% for post in popular_posts %}
+          <li>
+            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    {% if post %}
     <div class="widget-sidebar widget-tags">
       <h5 class="sidebar-title">Tags</h5>
       <div class="sidebar-content">
@@ -42,4 +58,6 @@
         </ul>
       </div>
     </div>
+    {% else %}
+    {% endif %}
   </div>

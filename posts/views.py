@@ -78,6 +78,10 @@ def index(request):
 
 def post_list(request, tag_slug=None):
     object_list = Post.published.all()
+    latest_posts = Post.published.order_by('-publish')[:5]
+    display_title = "Latest"
+    tags = Tag.objects.all()[:5]
+
 
     tag = None
 
@@ -95,7 +99,7 @@ def post_list(request, tag_slug=None):
     except EmptyPage:
         # if page is out of range deliver the last page
         posts = paginator.page(paginator.num_pages)
-    return render(request, 'blog.html', {'posts': posts, 'page':page, 'tag':tag})
+    return render(request, 'blog.html', {'posts': posts, 'page':page, 'tag':tag, 'tags':tags, 'latest_posts':latest_posts, 'display_title': display_title})
 
 class PostListView(ListView):
     queryset = Post.published.all()
@@ -135,13 +139,15 @@ def post_detail(request, year, month, day, post):
     post_tags_ids = post.tags.values_list('id', flat=True)
     similar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id)
     similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags', '-publish')[:4]
+    display_title = 'Similar'
 
     return render(request, 'blog-single.html', {
         'post': post, 
         'comments': comments, 
         'new_comment': new_comment,
         'comment_form': comment_form,
-        'similar_posts': similar_posts
+        'similar_posts': similar_posts,
+        'display_title': display_title
     })
 
 def post_share(request, post_id):
