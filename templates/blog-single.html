@@ -38,14 +38,15 @@
                 </li>
                 <li>
                   <span class="ion-pricetag"></span>
-                  {% for cat in post.categories.all %}
+                  {% comment %} {% for cat in post.categories.all %}
                   <a href="#">{{ cat }}</a>
-                  {% endfor %}
+                  {% endfor %} {% endcomment %}
                 </li>
                 <li>
                   <span class="ion-chatbox"></span>
-                  <a href="#">{{ post.comments.count }}</a>
+                  {% comment %} <a href="#">{{ post.comments.count }}</a> {% endcomment %}
                 </li>
+{% comment %}                 
                 {% if request.user.is_authenticated %}
                 <li>
                   <span class="ion-edit"></span>
@@ -55,11 +56,11 @@
                   <span class="ion-trash-b"></span>
                   <a href="{% url 'post_delete' id=post.id %}">Delete</a>
                 </li>
-                {% endif %}
+                {% endif %} {% endcomment %}
               </ul>
             </div>
             <div class="article-content">
-              {{ post.content|safe }}
+              {{ post.body|safe|linebreaks }}
             </div>
           </div>
           <div class="box-comments">
@@ -67,7 +68,7 @@
               <h4 class="title-comments title-left">Comments ({{ post.comments.count }})</h4>
             </div>
             <ul class="list-comments">
-              {% for comment in comments %}
+              {% comment %} {% for comment in comments %}
               <li>
                 <div class="comment-avatar">
                   {% if request.user == comment.post.author.user %}
@@ -85,7 +86,7 @@
                   {% if request.user.is_authenticated %}
                   
                   
-                  <a href="">Reply</a>
+                  <a href="">Reply</a> {% endcomment %}
                   {% comment %}<div class="form-comments rf">
                     <div class="title-box-2">
                       <h3 class="title-left">
@@ -123,7 +124,7 @@
                       </div>
                     </form>
                   </div>{% endcomment %}
-                  {% endif %}
+                  {% comment %} {% endif %}
                 </div>
               </li>
               {% for reply in comment.replies.all %}
@@ -146,7 +147,7 @@
                 </div>
               </li>
               {% endfor %}
-              {% endfor %}
+              {% endfor %} {% endcomment %}
             </ul>
           </div>
           <div class="form-comments">
@@ -155,6 +156,7 @@
                 Leave a Reply
               </h3>
             </div>
+{% comment %}             
             <form action="." method="POST" class="form-mf" novalidate>
               <div class="row">
                 {% csrf_token %}
@@ -183,10 +185,10 @@
                   <button type="submit" class="button button-a button-big button-rouded">Send Message</button>
                 </div>
               </div>
-            </form>
+            </form> {% endcomment %}
           </div>
         </div>
-        {% include 'sidebar.html' with most_recent=most_recent queryset=queryset %}
+        {% comment %} {% include 'sidebar.html' with most_recent=most_recent queryset=queryset %} {% endcomment %}
       </div>
     </div>
   </section>

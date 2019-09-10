@@ -86,7 +86,7 @@ def post_detail(request, year, month, day, post):
         publish__month=month,
         publish__day=day
     )
-    return render('blog-single.html', {'post': post})
+    return render(request, 'blog-single.html', {'post': post})
 
 # def post_create(request):
 #     title = 'Create'
