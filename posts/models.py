@@ -44,7 +44,7 @@ class Post(models.Model):
             self.publish.day,
             self.slug
         ])
-
+    
     # def get_update_url(self):
     #     return reverse('post_update', kwargs={
     #         'id': self.id

@@ -86,11 +86,29 @@ def estimate_reading_time(url):
     total_words = count_words_in_text(filtered_text, WORD_LENGTH)
     return round(total_words/WPM)
 
+def get_article_reading_time(request):
+    object_list = Post.published.all()
+    for obj in object_list:
+        # my_post = get_object_or_404(Post, id=1, status='published')
+        post_url = request.build_absolute_uri(obj.get_absolute_url())
+        print(f"blog{estimate_reading_time(post_url)}")
+
 def index(request):
     recent_queryset = Post.published.order_by('-publish')[:5]
+    
+    object_list = Post.published.all()
+    reading_times = {}
+    for obj in object_list:
+        # my_post = get_object_or_404(Post, id=1, status='published')
+        post_url = request.build_absolute_uri(obj.get_absolute_url())
+        reading_times[obj.slug] = estimate_reading_time(post_url)
+        request.session[obj.slug] = estimate_reading_time(post_url)
+        print(reading_times)
+
     context = {
         'recent_queryset': recent_queryset,
     }
+
     return render(request, 'index.html', context)
 
 def post_list(request, tag_slug=None):
@@ -98,7 +116,6 @@ def post_list(request, tag_slug=None):
     latest_posts = Post.published.order_by('-publish')[:5]
     display_title = "Latest"
     tags = Tag.objects.all()[:5]
-
 
     tag = None
 
@@ -134,6 +151,9 @@ def post_detail(request, year, month, day, post):
         publish__day=day
     )
 
+    # reading time
+    article_reading_time = request.session.get(post.slug)
+
     # list of active comments for this post
     comments = post.comments.filter(active=True)
 
@@ -164,7 +184,8 @@ def post_detail(request, year, month, day, post):
         'new_comment': new_comment,
         'comment_form': comment_form,
         'similar_posts': similar_posts,
-        'display_title': display_title
+        'display_title': display_title,
+        'article_reading_time': article_reading_time
     })
 
 def post_share(request, post_id):

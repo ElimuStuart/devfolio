@@ -36,28 +36,25 @@
               <ul>
                 <li>
                   <span class="ion-ios-person"></span>
-                  <a href="#">{{ post.author }}</a>
+                  {{ post.author }}
                 </li>
                 <li>
                   <span class="ion-ios-person"></span>
                   <a href="{% url 'posts:post_share' post.id %}">Share</a>
                 </li>
-                <li>
-                  <span class="ion-pricetag"></span>
-                  {% comment %} {% for cat in post.categories.all %}
-                  <a href="#">{{ cat }}</a>
-                  {% endfor %} {% endcomment %}
-                </li>
+                
                 <li>
                   <span class="ion-chatbox"></span>
-                  <a href="#">{{ comments.count }}</a>
+                  {{ comments.count }}
+                </li>
+
+                <li>
+                  <span class="ion-ios-clock-outline"></span>
+                  {{ article_reading_time }} min
                 </li>
 {% comment %}                 
                 {% if request.user.is_authenticated %}
-                <li>
-                  <span class="ion-edit"></span>
-                  <a href="{% url 'post_update' id=post.id %}">Update</a>
-                </li>
+                
                 <li>
                   <span class="ion-trash-b"></span>
                   <a href="{% url 'post_delete' id=post.id %}">Delete</a>
