@@ -48,7 +48,7 @@
                 </li>
                 <li>
                   <span class="ion-chatbox"></span>
-                  {% comment %} <a href="#">{{ post.comments.count }}</a> {% endcomment %}
+                  <a href="#">{{ comments.count }}</a>
                 </li>
 {% comment %}                 
                 {% if request.user.is_authenticated %}
@@ -69,29 +69,27 @@
           </div>
           <div class="box-comments">
             <div class="title-box-2">
-              <h4 class="title-comments title-left">Comments ({{ post.comments.count }})</h4>
+              <h4 class="title-comments title-left">{{ comments.count }} Comment{{ comments.count|pluralize }}</h4>
             </div>
             <ul class="list-comments">
-              {% comment %} {% for comment in comments %}
+              {% for comment in comments %}
               <li>
                 <div class="comment-avatar">
-                  {% if request.user == comment.post.author.user %}
-                  <img src="{{ comment.post.author.profile_picture.url }}" alt="">
-                  {% else %}
                   <img src="{% static 'img/testimonial-2.jpg' %}" alt="">
-                  {% endif %}
                 </div>
                 <div class="comment-details">
                   <h4 class="comment-author">{{ comment.name }}</h4>
-                  <span>{{ comment.timestamp|date }}</span>
+                  <span>{{ comment.created|date }}</span>
                   <p>
-                    {{ comment.content }}
+                    {{ comment.body|linebreaks }}
                   </p>
+
+                  {% comment %}
                   {% if request.user.is_authenticated %}
                   
                   
-                  <a href="">Reply</a> {% endcomment %}
-                  {% comment %}<div class="form-comments rf">
+                  <a href="">Reply</a>
+                  <div class="form-comments rf">
                     <div class="title-box-2">
                       <h3 class="title-left">
                         Leave a Reply
@@ -127,10 +125,11 @@
                         </div>
                       </div>
                     </form>
-                  </div>{% endcomment %}
-                  {% comment %} {% endif %}
+                  </div>
+                  {% endif %}{% endcomment %}
                 </div>
               </li>
+              {% comment %}
               {% for reply in comment.replies.all %}
               <li class="comment-children">
                 <div class="comment-avatar">
@@ -151,45 +150,54 @@
                 </div>
               </li>
               {% endfor %}
-              {% endfor %} {% endcomment %}
+              {% endcomment %}
+              {% empty %}
+              <li>
+                <p>No comments</p>
+              </li>
+              {% endfor %} 
             </ul>
           </div>
           <div class="form-comments">
+            {% if new_comment %}
             <div class="title-box-2">
               <h3 class="title-left">
-                Leave a Reply
+                Your comment has been added
               </h3>
             </div>
-{% comment %}             
+            {% else %}
+            <div class="title-box-2">
+              <h3 class="title-left">
+                Add a new comment
+              </h3>
+            </div>
             <form action="." method="POST" class="form-mf" novalidate>
               <div class="row">
                 {% csrf_token %}
                 
                 <div class="col-md-6 mb-3">
                   <div class="form-group">
-                    {{ form.name|as_crispy_field }}
+                    {{ comment_form.name|as_crispy_field }}
                   </div>
                 </div>
                 <div class="col-md-6 mb-3">
                   <div class="form-group">
-                    {{ form.email|as_crispy_field }}                    
+                    {{ comment_form.email|as_crispy_field }}                    
                   </div>
                 </div>
                 <div class="col-md-12 mb-3">
                   <div class="form-group">
-                    {{ form.website|as_crispy_field }}
-                  </div>
-                </div>
-                <div class="col-md-12 mb-3">
-                  <div class="form-group">
-                    {{ form.content|as_crispy_field }}
+                    {{ comment_form.body|as_crispy_field }}
                   </div>
                 </div>
                 <div class="col-md-12">
-                  <button type="submit" class="button button-a button-big button-rouded">Send Message</button>
+                  <button type="submit" class="button button-a button-big button-rouded">Comment</button>
                 </div>
               </div>
-            </form> {% endcomment %}
+            </form>
+            
+
+            {% endif %}
           </div>
         </div>
         {% comment %} {% include 'sidebar.html' with most_recent=most_recent queryset=queryset %} {% endcomment %}
@@ -204,16 +212,17 @@
     {% include 'footer.html' %}    
   </section>
   <!--/ Section Contact-footer End /-->
+{% comment %} 
+  <script>
 
-  <!-- <script>
-
-    const REPLYFORM = document.querySelector(".rf")
+    const REPLYFORM = document.querySelector("form-mf")
     const REPLYBTN = document.querySelector("#btn-reply")
-    REPLYBTN.addEventListener('click', function(){
-      REPLYFORM.classList.toggle(".show")
+    REPLYBTN.addEventListener('click', function(e){
+      e.preventDefault();
+      REPLYFORM.submit();
     })
   
-  </script> -->
+  </script> {% endcomment %}
   
 
   {% endblock content %}
