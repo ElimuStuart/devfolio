@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% load posts_tags %}
+
 
 {% block content %}
 
@@ -60,7 +62,7 @@
                         </div>
                         <h3 class="card-title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
                         <p class="card-description">
-                        {{ post.body|truncatewords:10|linebreaks }}
+                        {{ post.body|markdown|truncatewords_html:10 }}
                         </p>
                     </div>
                     <div class="card-footer">
