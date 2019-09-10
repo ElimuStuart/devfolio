@@ -1,6 +1,6 @@
 from django import forms
 from tinymce import TinyMCE
-from .models import Post
+from .models import Post, Comment
 
 
 class TinyMCEWidget(TinyMCE):
@@ -25,11 +25,10 @@ class EmailPostForm(forms.Form):
 #         fields = ('title', 'overview', 'content', 'thumbnail', 'categories')
 
 
-# class CommentForm(forms.ModelForm):
-    
-#     class Meta:
-#         model = Comment
-#         fields = ('name', 'email', 'website', 'content')
-#         labels = {
-#             'content': 'Comment'
-#         }
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('name', 'email', 'body')
+        labels = {
+            'body': 'Comment'
+        }
