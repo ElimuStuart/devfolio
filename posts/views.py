@@ -1,3 +1,4 @@
+from django.contrib.postgres.search import SearchVector
 from django.db.models import Q, Count
 from django.core.paginator import PageNotAnInteger, Paginator, EmptyPage
 from django.shortcuts import render, get_object_or_404, redirect, reverse
@@ -6,7 +7,7 @@ from django.core.mail import send_mail
 from taggit.models import Tag
 
 from .models import Post, Comment
-from .forms import EmailPostForm, CommentForm
+from .forms import EmailPostForm, CommentForm, SearchForm
 
 import bs4
 import urllib.request, re
@@ -20,16 +21,27 @@ def get_author(user):
         return qs[0]
     return None
 
-def search(request):
-    queryset = Post.objects.all()
-    query = request.GET.get('q')
+def post_search(request):
+    # form = SearchForm()
+    # query = none
+    # results = []
+    # if 'query' in request.GET:
+    #     form = SearchForm(request.GET)
+    #     if form.is_valid():
+    #         query = form.cleaned_data['query']
+    #         results = Post.objects.annotate(
+    #             search=SearchVector('title', 'body')
+    #         ).filter(search=query)
+
+    results = []
+    query = request.GET.get('query')
     if query:
-        queryset = queryset.filter(
-            Q(title__icontains=query) |
-            Q(overview__icontains=query)
-        ).distinct()
+        results = Post.objects.annotate(
+                search=SearchVector('title', 'body')
+            ).filter(search=query)
+
     context = {
-        'queryset': queryset
+        'queryset': results
     }
 
     return render(request, 'search_results.html', context)

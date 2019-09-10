@@ -31,7 +31,6 @@ urlpatterns = [
     path('tinymce/', include('tinymce.urls')),
     path('', include('posts.urls', namespace='posts')),
     path('sitemap.xml', sitemap, {'sitemaps':sitemaps},name='django.contrib.sitemaps.views.sitemap'),
-    
 ]
 
 if settings.DEBUG:

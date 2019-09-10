@@ -13,16 +13,8 @@ class EmailPostForm(forms.Form):
     to = forms.EmailField()
     comments = forms.CharField(required=False, widget=forms.Textarea)
 
-# class PostForm(forms.ModelForm):
-#     content = forms.CharField(
-#         widget=TinyMCEWidget(
-#             attrs={'required': False, 'cols': 30, 'rows': 10}
-#         )
-#     )
-
-#     class Meta:
-#         model = Post
-#         fields = ('title', 'overview', 'content', 'thumbnail', 'categories')
+class SearchForm(forms.Form):
+    query = forms.CharField()
 
 
 class CommentForm(forms.ModelForm):
