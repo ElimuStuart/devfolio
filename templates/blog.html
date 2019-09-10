@@ -68,12 +68,12 @@
                     <div class="card-footer">
                         <div class="post-author">
                         <a href="#">
-                            {% comment %} <img src="{{ post.author.profile_picture }}" alt="" class="avatar rounded-circle"> {% endcomment %}
+                            <img src="{% static 'img/testimonial-2.jpg' %}" alt="" class="avatar rounded-circle">
                             <span class="author">{{ post.author }}</span>
                         </a>
                         </div>
                         <div class="post-date">
-                        <span class="ion-ios-clock-outline"></span>{{ post.create|date }}
+                        <span class="ion-android-calendar"></span> {{ post.create|date }}
                         </div>
                     </div>
                 </div>
