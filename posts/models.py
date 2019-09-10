@@ -1,66 +1,70 @@
 from django.db import models
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
+from django.utils import timezone
 from django.urls import reverse
 from tinymce import HTMLField
 
-User = get_user_model()
-
-class Author(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_picture = models.ImageField()
-
-    def __str__(self):
-        return self.user.username
-
-
-class Category(models.Model):
-    title = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.title
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return super(PublishedManager, self).get_queryset().filter(status='published')
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=100)
-    overview = models.TextField()
-    content = HTMLField()
-    timestamp = models.DateTimeField(auto_now_add=True)
-    comment_count = models.IntegerField(default=0)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+
+    STATUS_CHOICES = (
+        ('draft', 'Draft'),
+        ('published', 'Published'),
+    )
+
+    title = models.CharField(max_length=250)
+    slug = models.SlugField(max_length=250, unique_for_date='publish')
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     thumbnail = models.ImageField()
-    categories = models.ManyToManyField(Category)
-    
+    body = HTMLField()
+    publish = models.DateTimeField(default=timezone.now)
+    create = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(auto_now=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
+
+    objects = models.Manager() # the default manage i.e Post.objects.all()
+    published = PublishedManager() # our custom manager i.e Post.published.all()
+
+    class Meta:
+        ordering = ('-publish',)
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('post_detail', kwargs={
-            'id': self.id
-        })
+        return reverse('posts:post_detail', args=[
+            self.publish.year,
+            self.publish.month,
+            self.publish.day,
+            self.slug
+        ])
 
-    def get_update_url(self):
-        return reverse('post_update', kwargs={
-            'id': self.id
-        })
+    # def get_update_url(self):
+    #     return reverse('post_update', kwargs={
+    #         'id': self.id
+    #     })
 
-    def get_delete_url(self):
-        return reverse('post_delete', kwargs={
-            'id': self.id
-        })
+    # def get_delete_url(self):
+    #     return reverse('post_delete', kwargs={
+    #         'id': self.id
+    #     })
 
-    @property
-    def get_comments(self):
-        return self.comments.all().order_by('-timestamp')
+    # @property
+    # def get_comments(self):
+    #     return self.comments.all().order_by('-timestamp')
 
-class Comment(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
-    website = models.URLField()
-    content = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)
-    post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
-    parent = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.SET_NULL)
+# class Comment(models.Model):
+#     name = models.CharField(max_length=100)
+#     email = models.EmailField()
+#     website = models.URLField()
+#     content = models.TextField()
+#     timestamp = models.DateTimeField(auto_now_add=True)
+#     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
+#     parent = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.SET_NULL)
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name

@@ -32,7 +32,7 @@
       <div class="row">
         <div class="col-md-8">
           <div class="row">
-              {% for post in queryset %}
+              {% for post in posts %}
               <div class="col-md-6">
                 <div class="card card-blog">
                     <div class="card-img">
@@ -43,26 +43,26 @@
                     <div class="card-body">
                         <div class="card-category-box">
                         <div class="card-category">
-                          {% for cat in post.categories.all %}
+                          {% comment %} {% for cat in post.categories.all %}
                           <h6 class="category">{{ cat }}</h6>
-                          {% endfor %}
+                          {% endfor %} {% endcomment %}
                             
                         </div>
                         </div>
                         <h3 class="card-title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
                         <p class="card-description">
-                        {{ post.overview }}
+                        {{ post.body|truncatewords:10|linebreaks }}
                         </p>
                     </div>
                     <div class="card-footer">
                         <div class="post-author">
                         <a href="#">
-                            <img src="{{ post.author.profile_picture }}" alt="" class="avatar rounded-circle">
-                            <span class="author">{{ post.author.user }}</span>
+                            {% comment %} <img src="{{ post.author.profile_picture }}" alt="" class="avatar rounded-circle"> {% endcomment %}
+                            <span class="author">{{ post.author }}</span>
                         </a>
                         </div>
                         <div class="post-date">
-                        <span class="ion-ios-clock-outline"></span> {{ post.timestamp|date }}
+                        <span class="ion-ios-clock-outline"></span> {{ post.create|date }}
                         </div>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
           </div>
 
           <!-- Pagination -->
-          <nav aria-label="Page navigation example">
+          {% comment %} <nav aria-label="Page navigation example">
             <ul class="pagination pagination-template d-flex justify-content-center">
                 {% if queryset.has_previous %}
                 <li class="page-item"><a href="?{{ page_request_var }}={{ queryset.previous_page_number }}" class="page-link"> <i class="fa fa-angle-left"></i></a></li>
@@ -81,10 +81,10 @@
                 <li class="page-item"><a href="?{{ page_request_var }}={{ queryset.next_page_number }}" class="page-link"> <i class="fa fa-angle-right"></i></a></li>
                 {% endif %}
             </ul>
-        </nav>
+        </nav> {% endcomment %}
 
         </div>
-        {% include 'sidebar.html' with most_recent=most_recent queryset=queryset %}
+        {% comment %} {% include 'sidebar.html' with most_recent=most_recent queryset=queryset %} {% endcomment %}
       </div>
     </div>
   </section>

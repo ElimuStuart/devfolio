@@ -46,6 +46,7 @@
                   <span class="ion-chatbox"></span>
                   <a href="#">{{ post.comments.count }}</a>
                 </li>
+                {% if request.user.is_authenticated %}
                 <li>
                   <span class="ion-edit"></span>
                   <a href="{% url 'post_update' id=post.id %}">Update</a>
@@ -54,6 +55,7 @@
                   <span class="ion-trash-b"></span>
                   <a href="{% url 'post_delete' id=post.id %}">Delete</a>
                 </li>
+                {% endif %}
               </ul>
             </div>
             <div class="article-content">
@@ -80,6 +82,9 @@
                   <p>
                     {{ comment.content }}
                   </p>
+                  {% if request.user.is_authenticated %}
+                  
+                  
                   <a href="">Reply</a>
                   {% comment %}<div class="form-comments rf">
                     <div class="title-box-2">
@@ -118,12 +123,13 @@
                       </div>
                     </form>
                   </div>{% endcomment %}
+                  {% endif %}
                 </div>
               </li>
               {% for reply in comment.replies.all %}
               <li class="comment-children">
                 <div class="comment-avatar">
-                  {% if request.user == comment.post.author.user %}
+                  {% if request.user == comment.post.author %}
                   <img src="{{ comment.post.author.profile_picture.url }}" alt="">
                   {% else %}
                   <img src="{% static 'img/testimonial-2.jpg' %}" alt="">
@@ -135,7 +141,6 @@
                   <p>
                     {{ reply.content }}
                   </p>
-                  <a href="3">Reply</a>
 
                   
                 </div>
