@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<style>
+  .article-content img {
+    width: 100%;
+  }
+  .asteriskField {
+    display: none;
+  }
+
+</style>
+
+{% include 'intro-skew.html' %}
+
+
+  <!--/ Section Blog-Single Star /-->
+  <section class="blog-wrapper sect-pt4" id="blog">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+        {% if sent %}
+          <div class="post-box">
+            
+            <div class="post-meta">
+            
+              <h1 class="article-title">E-mail sent successfully</h1>
+              <p>
+                "{{ post.title }}" was successfully sent to {{ form.cleaned_data.to }}
+              </p>
+            
+            
+            </div>
+            
+          </div>
+          {% else %}
+          <div class="form-comments">
+            <div class="title-box-2">
+              <h3 class="title-left">
+                Share "{{ post.title }}" by e-mail
+              </h3>
+            </div>
+            <form action="." method="POST" class="form-mf" novalidate>
+              <div class="row">
+                {% csrf_token %}
+                
+                <div class="col-md-6 mb-3">
+                  <div class="form-group">
+                    {{ form.name|as_crispy_field }}
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="form-group">
+                    {{ form.email|as_crispy_field }}                    
+                  </div>
+                </div>
+                <div class="col-md-12 mb-3">
+                  <div class="form-group">
+                    {{ form.to|as_crispy_field }}
+                  </div>
+                </div>
+                <div class="col-md-12 mb-3">
+                  <div class="form-group">
+                    {{ form.comments|as_crispy_field }}
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <button type="submit" class="button button-a button-big button-rouded">Send E-mail</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          {% endif %}
+        </div>
+        {% comment %} {% include 'sidebar.html' with most_recent=most_recent queryset=queryset %} {% endcomment %}
+      </div>
+    </div>
+  </section>
+  <!--/ Section Blog-Single End /-->
+
+  <!--/ Section Contact-Footer Star /-->
+  <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url({% static 'img/overlay-bg.jpg' %})">
+    <div class="overlay-mf"></div>
+    {% include 'footer.html' %}    
+  </section>
+  <!--/ Section Contact-footer End /-->
+
+  
+  
+
+  {% endblock content %}

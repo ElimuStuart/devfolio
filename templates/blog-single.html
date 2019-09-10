@@ -37,6 +37,10 @@
                   <a href="#">{{ post.author }}</a>
                 </li>
                 <li>
+                  <span class="ion-ios-person"></span>
+                  <a href="{% url 'posts:post_share' post.id %}">Share</a>
+                </li>
+                <li>
                   <span class="ion-pricetag"></span>
                   {% comment %} {% for cat in post.categories.all %}
                   <a href="#">{{ cat }}</a>
