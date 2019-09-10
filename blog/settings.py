@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'tinymce',
     'filebrowser',
     'crispy_forms',
+    'taggit',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
 from tinymce import HTMLField
+from taggit.managers import TaggableManager
 
 class PublishedManager(models.Manager):
     def get_queryset(self):
@@ -28,6 +29,7 @@ class Post(models.Model):
 
     objects = models.Manager() # the default manage i.e Post.objects.all()
     published = PublishedManager() # our custom manager i.e Post.published.all()
+    tags = TaggableManager()
 
     class Meta:
         ordering = ('-publish',)
