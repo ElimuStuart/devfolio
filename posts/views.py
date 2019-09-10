@@ -1,4 +1,4 @@
-from django.contrib.postgres.search import SearchVector
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.db.models import Q, Count
 from django.core.paginator import PageNotAnInteger, Paginator, EmptyPage
 from django.shortcuts import render, get_object_or_404, redirect, reverse
@@ -33,12 +33,17 @@ def post_search(request):
     #             search=SearchVector('title', 'body')
     #         ).filter(search=query)
 
-    results = []
     query = request.GET.get('query')
+
+    search_vector = SearchVector('title', 'body')
+    search_query = SearchQuery(query)
+    results = []
+    
     if query:
         results = Post.objects.annotate(
-                search=SearchVector('title', 'body')
-            ).filter(search=query)
+                search=search_vector,
+                rank=SearchRank(search_vector, search_query)
+            ).filter(search=search_query).order_by('-rank')
 
     context = {
         'queryset': results
