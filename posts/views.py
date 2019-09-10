@@ -1,4 +1,5 @@
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.contrib.postgres.search import TrigramSimilarity
 from django.db.models import Q, Count
 from django.core.paginator import PageNotAnInteger, Paginator, EmptyPage
 from django.shortcuts import render, get_object_or_404, redirect, reverse
