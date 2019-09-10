@@ -1,6 +1,6 @@
 from django import forms
 from tinymce import TinyMCE
-from .models import Post, Comment
+from .models import Post
 
 
 class TinyMCEWidget(TinyMCE):
@@ -13,23 +13,23 @@ class EmailPostForm(forms.Form):
     to = forms.EmailField()
     comments = forms.CharField(required=False, widget=forms.Textarea)
 
-class PostForm(forms.ModelForm):
-    content = forms.CharField(
-        widget=TinyMCEWidget(
-            attrs={'required': False, 'cols': 30, 'rows': 10}
-        )
-    )
+# class PostForm(forms.ModelForm):
+#     content = forms.CharField(
+#         widget=TinyMCEWidget(
+#             attrs={'required': False, 'cols': 30, 'rows': 10}
+#         )
+#     )
 
-    class Meta:
-        model = Post
-        fields = ('title', 'overview', 'content', 'thumbnail', 'categories')
+#     class Meta:
+#         model = Post
+#         fields = ('title', 'overview', 'content', 'thumbnail', 'categories')
 
 
-class CommentForm(forms.ModelForm):
+# class CommentForm(forms.ModelForm):
     
-    class Meta:
-        model = Comment
-        fields = ('name', 'email', 'website', 'content')
-        labels = {
-            'content': 'Comment'
-        }
+#     class Meta:
+#         model = Comment
+#         fields = ('name', 'email', 'website', 'content')
+#         labels = {
+#             'content': 'Comment'
+#         }
