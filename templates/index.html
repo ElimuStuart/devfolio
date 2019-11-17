@@ -513,7 +513,7 @@
               <div class="post-author">
                 <a href="#">
                   <img src="{% static 'img/testimonial-2.jpg' %}" alt="" class="avatar rounded-circle">
-                  <span class="author">{{ post.author }}</span>
+                  <span class="author">{{ post.author.first_name }} {{ post.author.last_name }}</span>
                 </a>
               </div>
               <div class="post-date">
