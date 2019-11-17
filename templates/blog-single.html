@@ -36,7 +36,7 @@
               <ul>
                 <li>
                   <span class="ion-ios-person"></span>
-                  {{ post.author }}
+                  {{ post.author.first_name }} {{ post.author.last_name }}
                 </li>
                 <li>
                   <span class="ion-android-share"></span>
@@ -74,7 +74,7 @@
               {% for comment in comments %}
               <li>
                 <div class="comment-avatar">
-                  <img src="{% static 'img/testimonial-2.jpg' %}" alt="">
+                  <img src="{% static 'img/avatar.png' %}" alt="">
                 </div>
                 <div class="comment-details">
                   <h4 class="comment-author">{{ comment.name }}</h4>
