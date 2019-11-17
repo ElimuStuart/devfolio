@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from decouple import config, Csv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,10 +21,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'z6^wr9at&*_-vc@sh@r0-81gh9rbg3^y86k2(#bt0smnccc67g'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     'filebrowser',
     'crispy_forms',
     'taggit',
+    'storages',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -136,20 +138,40 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-
-STATIC_URL = '/static/'
-
+VENV_PATH = os.path.dirname(BASE_DIR)
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static_in_env'),
 ]
 
-VENV_PATH = os.path.dirname(BASE_DIR)
+# aws
+USE_S3 = config('USE_S3', cast=bool)
+if USE_S3:
+    AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
 
-STATIC_ROOT = os.path.join(VENV_PATH, 'static_root')
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_DEFAULT_ACL = None
 
-MEDIA_URL = '/media/'
+    # s3 static settings
+    AWS_LOCATION = 'static'
+    STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+    STATICFILES_STORAGE = 'blog.storage_backends.StaticStorage'
 
-MEDIA_ROOT = os.path.join(VENV_PATH, 'media_root')
+    # s3 public media settings
+    PUBLIC_MEDIA_LOCATION = 'media'
+    MEDIA_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, PUBLIC_MEDIA_LOCATION)
+    DEFAULT_FILE_STORAGE = 'blog.storage_backends.PublicMediaStorage'
+else:
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(VENV_PATH, 'static_root')
+
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(VENV_PATH, 'media_root')
 
 
 TINYMCE_DEFAULT_CONFIG = {
@@ -180,4 +202,7 @@ TINYMCE_DEFAULT_CONFIG = {
     }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+
 
