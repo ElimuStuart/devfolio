@@ -6,6 +6,16 @@
 
 {% load crispy_forms_tags %}
 
+{% block title %} {{ post.title }} {% endblock %}
+
+{% block meta %}
+  <meta content="" name="description">
+  <meta property="og:title" content="{{ post.title }}"/>
+  <meta property="og:url" content="{{ post.get_absolute_url }}" />
+  <meta property="og:description" content="">
+  <meta property="og:image" content="{% static 'img/favicon.png' %}">
+  <meta property="og:type" content="article" />
+{% endblock meta %}
 
 {% block content %}
 

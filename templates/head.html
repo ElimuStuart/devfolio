@@ -1,10 +1,13 @@
 {% load static %}
 <head>
     <meta charset="utf-8">
-    <title>DevFolio Bootstrap Template</title>
+    <title>{% block title %} DevFolio {% endblock %}</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
+    {% block meta %}
     <meta content="" name="description">
+    {% endblock meta %}
+    
   
     <!-- Favicons -->
     <link href="{% static 'img/favicon.png' %}" rel="icon">
