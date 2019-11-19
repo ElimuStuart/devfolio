@@ -13,7 +13,8 @@
   <meta property="og:title" content="{{ post.title }}"/>
   <meta property="og:url" content="{{ post.get_absolute_url }}" />
   <meta property="og:description" content="">
-  <meta property="og:image" content="{% static 'img/favicon.png' %}">
+  {% comment %} <meta property="og:image" content="{% static 'img/favicon.png' %}"> {% endcomment %}
+  <meta property="og:image" content="{{ post.thumbnail.url }}">
   <meta property="og:type" content="article" />
 {% endblock meta %}
 
