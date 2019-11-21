@@ -491,7 +491,7 @@
         <div class="col-md-4">
           <div class="card card-blog">
             <div class="card-img">
-              <a href="blog-single.html">
+              <a href="{{ post.get_absolute_url }}">
                 <img src="{{ post.thumbnail.url }}" alt="" class="img-fluid">
               </a>
             </div>
@@ -512,7 +512,7 @@
             </div>
             <div class="card-footer">
               <div class="post-author">
-                <a href="#">
+                <a href="#about">
                   <img src="{% static 'img/testimonial-2.jpg' %}" alt="" class="avatar rounded-circle">
                   <span class="author">{{ post.author.first_name }} {{ post.author.last_name }}</span>
                 </a>
