@@ -50,26 +50,26 @@
                         <div class="card-category-box">
                         <div class="card-category">
                           {% for tag in post.tags.all %}
-                          <h6 class="category"><a class="text-white" href="{% url 'posts:post_list_by_tag' tag.slug %}">{{ tag }}
-                          {% if not forloop.last %} | {% endif %}</a></h6>
+                          <h6 class="category"><a class="text-white" href="{% url 'posts:post_list_by_tag' tag.slug %}">{% if forloop.first %} {{ tag }}
+                          {% endif %</a></h6>
                           {% endfor %}
                           
                         </div>
                         </div>
                         <h3 class="card-title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
                         <p class="card-description">
-                        {{ post.body|markdown|truncatewords_html:10 }}
+                        {{ post.body|markdown|truncatewords_html:20 }}
                         </p>
                     </div>
                     <div class="card-footer">
                         <div class="post-author">
                         <a href="#">
                             {% comment %} <img src="{{ post.author.profile_picture }}" alt="" class="avatar rounded-circle"> {% endcomment %}
-                            <span class="author">{{ post.author }}</span>
+                            <span class="author">{{ post.author.first_name }} {{ post.author.last_name }}</span>
                         </a>
                         </div>
                         <div class="post-date">
-                        <span class="ion-ios-clock-outline"></span> {{ post.create|date }}
+                        <span class="ion-ios-clock-outline"></span> {{ post.publish|date }}
                         </div>
                     </div>
                 </div>
