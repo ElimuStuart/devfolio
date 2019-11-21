@@ -94,7 +94,7 @@ def get_article_reading_time(request):
         print(f"blog{estimate_reading_time(post_url)}")
 
 def index(request):
-    recent_queryset = Post.published.order_by('-publish')[:5]
+    recent_queryset = Post.published.all()[:3]
     
     object_list = Post.published.all()
     reading_times = {}
